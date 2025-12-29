@@ -20,7 +20,7 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     setMenuOpen(false);
-    await logout(); // Calls backend logout (optional) + clears role
+    await logout(); // Calls backend logout (optional) + clears role ..
   };
 
   return (
