@@ -1,0 +1,52 @@
+.profile-page h1 {
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+}
+
+.profile-page p {
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.book-btn {
+  width: 150px;
+  margin-top: 10px;
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .profile-header {
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .profile-info {
+    flex: 1;
+  }
+}

@@ -1,0 +1,18 @@
+.review-card {
+  background: #f3f4f6;
+  padding: 14px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.review-card h5 {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.review-card p {
+  font-size: 0.85rem;
+  color: #374151;
+}

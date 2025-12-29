@@ -1,0 +1,196 @@
+/* =========================
+   Navbar Base
+   ========================= */
+
+.navbar {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* =========================
+   Logo
+   ========================= */
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #020617;
+  text-decoration: none;
+}
+
+.logo span {
+  background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =========================
+   Search
+   ========================= */
+
+.nav-search input {
+  width: 260px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+}
+
+.nav-search input:focus {
+  outline: none;
+  border-color: #38bdf8;
+}
+
+/* =========================
+   Links
+   ========================= */
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #020617;
+}
+
+.nav-links a:hover {
+  color: #0ea5e9;
+}
+
+/* CTA */
+.nav-cta {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  color: #020617 !important;
+  font-weight: 600;
+}
+
+/* =========================
+   User Section
+   ========================= */
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-left: 20px;
+  margin-left: 20px;
+  border-left: 1px solid #e2e8f0;
+}
+
+.user-greeting {
+  font-size: 0.9rem;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.logout-btn:hover {
+  background: #fee2e2;
+}
+
+/* =========================
+   Hamburger
+   ========================= */
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+}
+
+.hamburger span {
+  width: 22px;
+  height: 2px;
+  background: #020617;
+}
+
+/* =========================
+   Mobile
+   ========================= */
+
+@media (max-width: 768px) {
+  .nav-search {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 64px;
+    right: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    flex-direction: column;
+    gap: 16px;
+    display: none;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .user-section {
+    border-left: none;
+    padding-left: 0;
+    margin-left: 0;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 12px;
+    width: 100%;
+  }
+}
+
+/* =========================
+   Photographer Layout Fix
+   ========================= */
+
+/* When search is hidden, keep navbar aligned */
+.nav-container {
+  gap: 20px;
+}
+
+/* Photographer role spacing */
+.nav-links {
+  flex-wrap: nowrap;
+}
+
+/* Prevent layout jump */
+@media (min-width: 769px) {
+  .nav-search {
+    min-width: 260px;
+  }
+}
+

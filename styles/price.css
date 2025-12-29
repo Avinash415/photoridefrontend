@@ -1,0 +1,24 @@
+.price-card {
+  background: #f9fafb;
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.price-row.total {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.secure-text {
+  font-size: 0.8rem;
+  color: #16a34a;
+  margin-top: 10px;
+}

@@ -1,0 +1,136 @@
+.portfolio-container {
+  max-width: 1200px;
+  margin: auto;
+  padding-bottom: 40px;
+}
+
+/* Hero */
+.hero-cover {
+  position: relative;
+  height: 380px;
+}
+
+.cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.7), transparent);
+  color: white;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.hero-overlay h1 {
+  font-size: 36px;
+}
+
+.bio {
+  max-width: 600px;
+  margin-top: 8px;
+}
+
+.status {
+  margin-top: 12px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  width: fit-content;
+  font-size: 14px;
+}
+
+.status.on {
+  background: #22c55e;
+}
+
+.status.off {
+  background: #ef4444;
+}
+
+/* Actions */
+.actions-bar {
+  display: flex;
+  gap: 12px;
+  padding: 20px;
+}
+
+.actions-bar button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #111;
+  color: white;
+  cursor: pointer;
+}
+
+/* Services */
+.services-section {
+  padding: 20px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.service-card {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+}
+
+.price {
+  font-weight: bold;
+  margin: 6px 0;
+}
+
+/* Empty */
+.empty-portfolio {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.empty-portfolio button {
+  margin-top: 20px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* Skeleton */
+.skeleton-cover,
+.skeleton-header,
+.skeleton-card {
+  background: #e5e7eb;
+  border-radius: 8px;
+  margin: 16px;
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-cover {
+  height: 300px;
+}
+
+.skeleton-header {
+  height: 40px;
+}
+
+.skeleton-card.large {
+  height: 120px;
+}
+
+@keyframes pulse {
+  0% { opacity: .5; }
+  50% { opacity: 1; }
+  100% { opacity: .5; }
+}

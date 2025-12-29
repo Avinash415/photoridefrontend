@@ -1,0 +1,324 @@
+/* photographer-dashboard.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 2.5rem 1.5rem 5rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.dashboard-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.dashboard-header h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+/* Stats Grid with glassmorphism + hover animation */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 1.25rem;
+  padding: 1.6rem 1.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.stat-card:hover::before,
+.stat-card.active::before {
+  opacity: 1;
+}
+
+.stat-card:hover,
+.stat-card.active {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(99, 102, 241, 0.18);
+}
+
+.stat-label {
+  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.7rem;
+}
+
+.stat-value {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #1e293b;
+  line-height: 1;
+}
+
+/* Status specific subtle glow */
+.stat-card.all { --accent: #6366f1; }
+.stat-card.pending { --accent: #f59e0b; }
+.stat-card.accepted { --accent: #10b981; }
+.stat-card.rejected { --accent: #ef4444; }
+
+.stat-card::after {
+  content: "";
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: 0.08;
+  top: -40px;
+  right: -40px;
+  border-radius: 50%;
+  transition: transform 0.8s ease;
+}
+
+.stat-card:hover::after,
+.stat-card.active::after {
+  transform: scale(1.4);
+}
+
+/* Bookings Section */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeInUp 0.7s 0.3s forwards;
+}
+
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.booking-card {
+  background: white;
+  border-radius: 1.25rem;
+  padding: 1.5rem 1.8rem;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(226, 232, 240, 0.7);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateY(30px);
+  animation: cardFadeIn 0.6s forwards;
+}
+
+.booking-card:nth-child(1) { animation-delay: 0.1s; }
+.booking-card:nth-child(2) { animation-delay: 0.2s; }
+.booking-card:nth-child(3) { animation-delay: 0.3s; }
+.booking-card:nth-child(4) { animation-delay: 0.4s; }
+/* ... you can continue pattern for more cards */
+
+.booking-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+}
+
+.booking-info h3 {
+  font-size: 1.22rem;
+  margin-bottom: 0.4rem;
+  color: #0f172a;
+}
+
+.service {
+  color: #475569;
+  font-size: 0.98rem;
+  margin-bottom: 0.5rem;
+}
+
+.date {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* Buttons & Actions */
+.btn {
+  padding: 0.7rem 1.5rem;
+  border-radius: 3rem;
+  font-weight: 600;
+  font-size: 0.94rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-pending {
+  background: #f59e0b;
+  color: white;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+}
+
+.btn-pending:hover {
+  background: #d97706;
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(245, 158, 11, 0.45);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.9rem;
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.action-buttons.animate-in {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.4s ease-out;
+}
+
+.btn-accept {
+  background: #10b981;
+  color: white;
+}
+
+.btn-accept:hover {
+  background: #059669;
+  transform: translateY(-3px) scale(1.03);
+}
+
+.btn-reject {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-reject:hover {
+  background: #dc2626;
+  transform: translateY(-3px) scale(1.03);
+}
+
+.status-badge {
+  padding: 0.5rem 1.3rem;
+  border-radius: 3rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.status-badge.animate-in {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.4s ease-out;
+}
+
+.status-badge.accepted {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Loading & Empty */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  color: #64748b;
+  gap: 1.5rem;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #e2e8f0;
+  border-top: 5px solid #6366f1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 6rem 1rem;
+  color: #94a3b8;
+  background: rgba(241, 245, 249, 0.5);
+  border-radius: 1.25rem;
+  border: 2px dashed #cbd5e1;
+  font-size: 1.1rem;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+
+  .booking-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.4rem;
+  }
+
+  .booking-actions {
+    align-self: flex-end;
+  }
+
+  .dashboard-header h1 {
+    font-size: 2rem;
+  }
+}

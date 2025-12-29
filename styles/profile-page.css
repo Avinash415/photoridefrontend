@@ -1,0 +1,73 @@
+/* styles/profile-page.css */
+.profile-page {
+  padding: 3rem 0;
+}
+
+.profile-header {
+  display: flex;
+  gap: 2rem;
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 3rem;
+  align-items: center;
+}
+
+.profile-header img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #ff6b6b;
+}
+
+.profile-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.profile-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+  margin: 0.4rem 0;
+}
+
+.booking-section {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.booking-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: #1e293b;
+}
+
+.booking-section .form-group {
+  margin-bottom: 1.8rem;
+}
+
+.booking-section input,
+.booking-section select {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 1.1rem;
+}
+
+.booking-section input:focus,
+.booking-section select:focus {
+  border-color: #ff6b6b;
+  outline: none;
+}
+
+.booking-section .btn-primary {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}

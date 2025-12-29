@@ -1,0 +1,33 @@
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.package-card {
+  padding: 16px;
+  background: #ffffff;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.package-card:hover {
+  transform: translateY(-3px);
+}
+
+.package-card.active {
+  border-color: var(--secondary);
+}
+
+.package-card h4 {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+.package-card span {
+  color: var(--secondary);
+  font-weight: 600;
+}
