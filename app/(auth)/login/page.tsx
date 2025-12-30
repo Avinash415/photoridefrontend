@@ -40,6 +40,10 @@ function LoginForm({ onSuccess }: { onSuccess: (role: string) => void }) {
     try {
       const response = await api("/api/auth/login", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
