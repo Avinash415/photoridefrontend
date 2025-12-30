@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("role");
 
     try {
-      await fetch("http://localhost:5000/api/auth/logout", {
+      await fetch("https://photo-ride-backend-latest.onrender.com/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });
