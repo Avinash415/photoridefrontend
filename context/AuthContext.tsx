@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { api } from "@/lib/api";
 
 const AuthContext = createContext<any>(null);
 
@@ -11,21 +12,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [role, setRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 🔥 Restore role on refresh
+  // ✅ Restore session from backend (SOURCE OF TRUTH)
   useEffect(() => {
-    const storedRole = localStorage.getItem("role");
-    if (storedRole) {
-      setRole(storedRole);
-    }
-    setIsLoading(false);
+    const restoreSession = async () => {
+      try {
+        const data = await api("/api/auth/me");
+        setRole(data.user.role);
+      } catch {
+        setRole(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    restoreSession();
   }, []);
 
-  // 🔥 Login handler
+  // ✅ Login (backend already set cookie)
   const login = (newRole: string) => {
     setRole(newRole);
-    localStorage.setItem("role", newRole);
 
-    // ✅ Redirect rules
     if (newRole === "customer") {
       router.replace("/");
     } else if (newRole === "photographer") {
@@ -33,18 +39,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  // 🔥 Logout handler
+  // ✅ Logout
   const logout = async () => {
-    setRole(null);
-    localStorage.removeItem("role");
-
     try {
-      await fetch("https://photo-ride-backend-latest.onrender.com/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-    } catch (e) {}
+      await api("/api/auth/logout", { method: "POST" });
+    } catch {}
 
+    setRole(null);
     router.replace("/");
   };
 
