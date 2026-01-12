@@ -1,4 +1,3 @@
-// app/(auth)/register/page.tsx
 "use client";
 
 import "./page.css";
@@ -28,21 +27,24 @@ export default function RegisterPage() {
     };
 
     try {
-      // Assuming your backend has /api/auth/register
+      // ✅ Add credentials include
       const response = await api("/api/auth/register", {
         method: "POST",
+        credentials: "include", // ✅ Add this
         body: JSON.stringify(data),
       });
 
-      // If registration successful and backend returns token directly
-      // (some backends auto-login after register)
+      console.log("Register response:", response); // ✅ Debug log
+
+      // If registration successful
       if (response.role) {
-        login(response.role); // 🔥 auto-login
+        login(response.role); // ✅ Auto-login with role
       } else {
         // Otherwise redirect to login
         router.push("/login?registered=true");
       }
     } catch (err: any) {
+      console.error("Register error:", err); // ✅ Debug log
       setError(err.message || "Registration failed");
     } finally {
       setLoading(false);

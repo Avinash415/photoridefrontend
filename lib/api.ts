@@ -1,34 +1,58 @@
 export const api = async (url: string, options: RequestInit = {}) => {
-  // ✅ Ensure we're using correct API URL
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  // ✅ PRODUCTION: Must use environment variable
+  const baseURL = process.env.NEXT_PUBLIC_API_URL;
   
-  const res = await fetch(`${baseURL}${url}`, {
-    ...options,
-    credentials: "include", // ✅ Cookies send/receive ke liye zaroori
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
-  });
-
-  // ✅ Handle 401 (Unauthorized) specifically
-  if (res.status === 401) {
-    // Clear local auth state
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("role");
-      window.location.href = "/login?session=expired";
-    }
-    throw new Error("Session expired. Please login again.");
+  if (!baseURL) {
+    console.error("❌ NEXT_PUBLIC_API_URL is not set!");
+    throw new Error("API URL is not configured");
   }
+  
+  console.log("🔍 API Call to:", `${baseURL}${url}`);
 
-  if (!res.ok) {
-    let errorMessage = "API error";
+  try {
+    const res = await fetch(`${baseURL}${url}`, {
+      ...options,
+      credentials: "include", // ✅ MUST for cookies
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
+      },
+    });
+
+    console.log("🔍 Response Status:", res.status);
+    
+    const responseText = await res.text();
+    let responseData;
+    
     try {
-      const errorData = await res.json();
-      errorMessage = errorData.message || errorMessage;
-    } catch {}
-    throw new Error(errorMessage);
-  }
+      responseData = responseText ? JSON.parse(responseText) : {};
+    } catch {
+      responseData = { message: "Invalid JSON response" };
+    }
 
-  return res.json();
+    // ✅ Handle 401
+    if (res.status === 401) {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("role");
+        localStorage.removeItem("user");
+        window.location.href = "/login?session=expired";
+      }
+      throw new Error("Session expired");
+    }
+
+    // ✅ Handle 400 (Invalid credentials)
+    if (res.status === 400) {
+      throw new Error(responseData.message || "Invalid credentials");
+    }
+
+    // ✅ Handle other errors
+    if (!res.ok) {
+      throw new Error(responseData.message || `API error: ${res.status}`);
+    }
+
+    return responseData;
+  } catch (error) {
+    console.error("❌ API Error:", error);
+    throw error;
+  }
 };

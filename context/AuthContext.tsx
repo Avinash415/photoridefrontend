@@ -2,7 +2,6 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { api } from "@/lib/api";
 
 const AuthContext = createContext<any>(null);
 
@@ -10,27 +9,53 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const [role, setRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
 
-  // ✅ Restore session - IMPROVED VERSION
+  // ✅ Restore session - PRODUCTION READY
   useEffect(() => {
     const restoreSession = async () => {
       try {
-        const data = await api("/api/auth/me");
-        setRole(data.user.role);
-        setUser(data.user);
-        
-        // ✅ Agar authenticated hai to localStorage mein save karo (fallback)
-        if (data.user?.role) {
-          localStorage.setItem("role", data.user.role);
-          localStorage.setItem("user", JSON.stringify(data.user));
+        // ✅ Pehle localStorage check karo
+        const storedRole = localStorage.getItem("role");
+        if (storedRole) {
+          setRole(storedRole);
+          setIsLoading(false);
+          console.log("✅ Session restored from localStorage");
+          return;
+        }
+
+        // ✅ Agar localStorage mein nahi hai, to backend se check karo
+        const baseURL = process.env.NEXT_PUBLIC_API_URL;
+        if (!baseURL) {
+          console.error("❌ NEXT_PUBLIC_API_URL is not set");
+          setIsLoading(false);
+          return;
+        }
+
+        console.log("🔍 Checking backend session...");
+        const res = await fetch(`${baseURL}/api/auth/me`, {
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const userRole = data.user?.role || null;
+          setRole(userRole);
+          
+          if (userRole) {
+            localStorage.setItem("role", userRole);
+            localStorage.setItem("user", JSON.stringify(data.user || {}));
+            console.log("✅ Session restored from backend");
+          }
+        } else {
+          console.log("❌ No active session on backend");
+          setRole(null);
         }
       } catch (error) {
-        console.log("Session restore failed:", error);
+        console.log("❌ Session restore error:", error);
         setRole(null);
-        setUser(null);
-        localStorage.removeItem("role");
-        localStorage.removeItem("user");
       } finally {
         setIsLoading(false);
       }
@@ -39,66 +64,58 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     restoreSession();
   }, []);
 
-  // ✅ Login function update
-  const login = async (email: string, password: string) => {
-    try {
-      const data = await api("/api/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-      });
-      
-      setRole(data.role);
-      setUser(data.user);
-      
-      // ✅ Local storage mein save karo
-      if (data.role) {
-        localStorage.setItem("role", data.role);
-      }
-      
-      // Redirect based on role
-      if (data.role === "customer") {
-        router.push("/");
-      } else if (data.role === "photographer") {
-        router.push("/photographers/dashboard");
-      }
-      
-      return { success: true, data };
-    } catch (error) {
-      return { success: false, error };
+  // ✅ Login function
+  const login = (newRole: string) => {
+    console.log("✅ Setting role:", newRole);
+    setRole(newRole);
+    localStorage.setItem("role", newRole);
+    
+    // ✅ Use window.location for production redirect
+    if (newRole === "customer") {
+      window.location.href = "/";
+    } else if (newRole === "photographer") {
+      window.location.href = "/photographers/dashboard";
     }
   };
 
-  // ✅ Logout function update
+  // ✅ Logout function
   const logout = async () => {
     try {
-      await api("/api/auth/logout", { method: "POST" });
+      const baseURL = process.env.NEXT_PUBLIC_API_URL;
+      if (baseURL) {
+        await fetch(`${baseURL}/api/auth/logout`, {
+          method: "POST",
+          credentials: "include",
+        });
+      }
     } catch (error) {
       console.error("Logout error:", error);
     }
-    
-    // Clear all state
+
+    // Clear everything
     setRole(null);
-    setUser(null);
     localStorage.removeItem("role");
     localStorage.removeItem("user");
     
-    router.push("/login");
+    // Redirect to login
+    window.location.href = "/login";
   };
 
-  // ✅ Check if user is authenticated
+  // ✅ Check authentication
   const isAuthenticated = () => {
     return !!role;
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      role, 
-      user,
-      login, 
-      logout, 
-      isLoading, 
-      isAuthenticated 
-    }}>
+    <AuthContext.Provider
+      value={{
+        role,
+        isLoading,
+        login,
+        logout,
+        isAuthenticated,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
