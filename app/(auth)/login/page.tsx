@@ -51,9 +51,10 @@ function LoginForm() {
       console.log("✅ Login successful:", response);
 
       // ✅ Save to localStorage
+      localStorage.setItem("token", response.token);
       localStorage.setItem("role", response.role);
-      localStorage.setItem("user", JSON.stringify(response.user || {}));
-
+      localStorage.setItem("user", JSON.stringify(response.user));
+      
       // ✅ Redirect based on role
       if (response.role === "customer") {
         window.location.href = "/"; // ✅ Force page reload
@@ -62,18 +63,20 @@ function LoginForm() {
       } else {
         window.location.href = "/";
       }
-
     } catch (err: any) {
       console.error("❌ Login error:", err);
-      
+
       // ✅ Better error messages
       let userMessage = err.message;
       if (err.message.toLowerCase().includes("invalid credential")) {
         userMessage = "Invalid email or password. Please try again.";
-      } else if (err.message.includes("fetch") || err.message.includes("network")) {
+      } else if (
+        err.message.includes("fetch") ||
+        err.message.includes("network")
+      ) {
         userMessage = "Cannot connect to server. Please check your connection.";
       }
-      
+
       setError(userMessage);
     } finally {
       setLoading(false);
@@ -88,14 +91,17 @@ function LoginForm() {
       <p>Sign in to continue</p>
 
       {/* Debug Info */}
-      <div style={{ 
-        background: '#f0f0f0', 
-        padding: '10px', 
-        borderRadius: '5px', 
-        marginBottom: '15px',
-        fontSize: '12px'
-      }}>
-        <strong>Debug Info:</strong><br />
+      <div
+        style={{
+          background: "#f0f0f0",
+          padding: "10px",
+          borderRadius: "5px",
+          marginBottom: "15px",
+          fontSize: "12px",
+        }}
+      >
+        <strong>Debug Info:</strong>
+        <br />
         API URL: {process.env.NEXT_PUBLIC_API_URL || "Not set"}
       </div>
 
@@ -125,12 +131,15 @@ function LoginForm() {
         </div>
 
         {error && (
-          <div className="error-text" style={{ 
-            background: '#ffebee', 
-            padding: '10px', 
-            borderRadius: '5px',
-            border: '1px solid #f44336'
-          }}>
+          <div
+            className="error-text"
+            style={{
+              background: "#ffebee",
+              padding: "10px",
+              borderRadius: "5px",
+              border: "1px solid #f44336",
+            }}
+          >
             <strong>Error:</strong> {error}
           </div>
         )}
