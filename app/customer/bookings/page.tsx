@@ -34,6 +34,11 @@ export default function CustomerBookingsPage() {
     fetchBookings();
   }, [authLoading]);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) router.replace("/login");
+  }, []);
+
   const fetchBookings = async () => {
     try {
       setFetchLoading(true);
@@ -103,7 +108,9 @@ export default function CustomerBookingsPage() {
     <div className="bookings-container">
       <div className="page-header">
         <h1>My Bookings</h1>
-        <p className="subtitle">Track and manage all your photography bookings in one place</p>
+        <p className="subtitle">
+          Track and manage all your photography bookings in one place
+        </p>
       </div>
 
       {bookings.length === 0 ? (
@@ -137,8 +144,13 @@ export default function CustomerBookingsPage() {
                   />
                   <div className="cover-overlay">
                     <div className="photographer-info">
-                      <h3>{booking.photographer?.name || "Unknown Photographer"}</h3>
-                      <p className="city">📍 {booking.photographer?.city || "Location not specified"}</p>
+                      <h3>
+                        {booking.photographer?.name || "Unknown Photographer"}
+                      </h3>
+                      <p className="city">
+                        📍{" "}
+                        {booking.photographer?.city || "Location not specified"}
+                      </p>
                     </div>
                     <div className={`status-badge ${statusInfo.color}`}>
                       <span className="icon">{statusInfo.icon}</span>
@@ -154,11 +166,15 @@ export default function CustomerBookingsPage() {
                   </div>
                   <div className="detail-row">
                     <span className="label">Amount</span>
-                    <span className="value price">₹{booking.servicePrice.toLocaleString("en-IN")}</span>
+                    <span className="value price">
+                      ₹{booking.servicePrice.toLocaleString("en-IN")}
+                    </span>
                   </div>
                   <div className="detail-row">
                     <span className="label">Booking Date</span>
-                    <span className="value">{formatDate(booking.bookingDate)}</span>
+                    <span className="value">
+                      {formatDate(booking.bookingDate)}
+                    </span>
                   </div>
                   {booking.note && (
                     <div className="detail-row note-row">

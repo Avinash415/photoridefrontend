@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { api } from "@/lib/api";
 
 const AuthContext = createContext<any>(null);
 
@@ -12,9 +13,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // ✅ Restore session - PRODUCTION READY
   useEffect(() => {
-    const role = localStorage.getItem("role");
-    setRole(role);
-    setIsLoading(false);
+    const restoreSession = async () => {
+      const role = localStorage.getItem("role");
+      const token = localStorage.getItem("token");
+
+      if (role && token) {
+        try {
+          await api("/api/auth/me"); // Validate token (calls backend getMe)
+          setRole(role);
+        } catch {
+          logout(); // Invalid → logout
+        }
+      } else {
+        setRole(null);
+      }
+      setIsLoading(false);
+    };
+    restoreSession();
   }, []);
 
   // ✅ Login function
@@ -22,6 +37,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     console.log("✅ Setting role:", newRole);
     setRole(newRole);
     localStorage.setItem("role", newRole);
+
+    // Add this: Set non-httpOnly cookie for middleware (sync with localStorage)
+    document.cookie = `role=${newRole}; path=/; max-age=86400; sameSite=lax`; // 1 day expiry
 
     // ✅ Use window.location for production redirect
     if (newRole === "customer") {
@@ -32,25 +50,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // ✅ Logout function
-  const logout = async () => {
-    try {
-      const baseURL = process.env.NEXT_PUBLIC_API_URL;
-      if (baseURL) {
-        await fetch(`${baseURL}/api/auth/logout`, {
-          method: "POST",
-          credentials: "include",
-        });
-      }
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
+  const logout = () => {
+    console.log("🚪 Logging out user");
 
-    // Clear everything
-    setRole(null);
+    // 🔥 REMOVE JWT & USER DATA
+    localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("user");
 
-    // Redirect to login
+    // Add this: Clear cookie
+    document.cookie = "role=; path=/; max-age=0";
+
+    // Reset state
+    setRole(null);
+
+    // ✅ HARD REDIRECT (IMPORTANT)
     window.location.href = "/login";
   };
 
