@@ -23,7 +23,6 @@ export default function PhotographerDetailsPage() {
   const router = useRouter();
   const { role } = useAuth();
 
-
   const [photographer, setPhotographer] = useState<Photographer | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -43,18 +42,13 @@ export default function PhotographerDetailsPage() {
     }
   };
 
-// const handleBooking = () => {
-//   router.push(`/booking/${id}`);
-// };
-
-const handleBooking = () => {
-  if (!role) {
-    router.push("/login");
-  } else {
-    router.push(`/booking/${id}`);
-  }
-};
-
+  const handleBooking = () => {
+    if (!role) {
+      router.push("/login");
+    } else {
+      router.push(`/booking/${id}`);
+    }
+  };
 
   if (loading) {
     return (
@@ -75,7 +69,7 @@ const handleBooking = () => {
 
   return (
     <section className="photographer-details">
-      {/* HERO SECTION */}
+      {/* HERO - more cinematic */}
       <div className="details-hero">
         <div className="hero-image-wrapper">
           <img
@@ -83,55 +77,73 @@ const handleBooking = () => {
             alt={photographer.name}
             className="hero-image"
           />
+          <div className="hero-overlay"></div>
         </div>
 
-        <div className="details-info">
+        <div className="details-info glass-card">
           <h1 className="fade-in">{photographer.name}</h1>
-          <p className="location fade-in delay-1">
+          <p className="category-location fade-in delay-1">
             {photographer.category} • {photographer.city}
           </p>
 
           <div className="stats fade-in delay-2">
             <div className="stat-item">
-              <span className="stat-icon">⭐</span>
-              <span>{photographer.rating}</span>
+              <span className="stat-icon">★</span>
+              <span>{photographer.rating.toFixed(1)}</span>
             </div>
             <div className="stat-item">
-              <span className="stat-icon">📸</span>
-              <span>{photographer.experience}+ years</span>
+              <span className="stat-icon">📷</span>
+              <span>{photographer.experience}+ yr</span>
             </div>
             <div className="stat-item">
               <span className="stat-icon">₹</span>
-              <span>{photographer.price}/session</span>
+              <span>
+                {photographer.price != null
+                  ? photographer.price.toLocaleString()
+                  : "—"}
+                /session
+              </span>
             </div>
           </div>
 
-          <button
-            className="book-btn fade-in delay-3"
-            onClick={handleBooking}
-          >
-            Book Now
-          </button>
+          <div className="action-buttons fade-in delay-3">
+            <button className="btn-primary" onClick={handleBooking}>
+              Book Now
+            </button>
+            <button
+              className="btn-outline"
+              onClick={() => router.push(`/photographers/${id}/profile`)}
+            >
+              View Full Profile
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* ABOUT SECTION */}
-      <div className="details-section about-section fade-in delay-4">
-        <h2>About the Photographer</h2>
-        <p>{photographer.description}</p>
+      {/* ABOUT */}
+      <div className="details-section about-section fade-in delay-4 glass-card">
+        <h2>About {photographer.name}</h2>
+        <p className="about-text">{photographer.description}</p>
       </div>
 
-      {/* SERVICES SECTION */}
-      <div className="details-section services-section fade-in delay-5">
+      {/* SERVICES - more visual & modern */}
+      <div className="details-section services-section fade-in delay-5 glass-card">
         <h2>Services Offered</h2>
-        <ul className="services">
-          <li className="service-item">Wedding Photography</li>
-          <li className="service-item">Pre-wedding Shoots</li>
-          <li className="service-item">Event Coverage</li>
-          <li className="service-item">Portrait Sessions</li>
-          <li className="service-item">Maternity & Newborn</li>
-          <li className="service-item">Fashion & Portfolio</li>
-        </ul>
+        <div className="services-grid">
+          {[
+            { icon: "💒", label: "Wedding Photography" },
+            { icon: "🌸", label: "Pre-wedding Shoots" },
+            { icon: "🎉", label: "Event Coverage" },
+            { icon: "👤", label: "Portrait Sessions" },
+            { icon: "👶", label: "Maternity & Newborn" },
+            { icon: "👗", label: "Fashion & Portfolio" },
+          ].map((service, idx) => (
+            <div key={idx} className="service-card">
+              <span className="service-icon">{service.icon}</span>
+              <span>{service.label}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

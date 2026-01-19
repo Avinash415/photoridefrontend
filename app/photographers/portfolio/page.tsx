@@ -78,7 +78,9 @@ export default function PhotographerPortfolioPage() {
         />
         <div className="hero-overlay">
           <h1>{profile.name}</h1>
-          <p>📍 {profile.city} • {profile.experience}+ yrs experience</p>
+          <p>
+            📍 {profile.city} • {profile.experience}+ yrs experience
+          </p>
           <p className="bio">{profile.bio}</p>
 
           <span className={`status ${profile.available ? "on" : "off"}`}>
@@ -94,6 +96,9 @@ export default function PhotographerPortfolioPage() {
         </button>
         <button onClick={() => router.push("/photographers/profile")}>
           ➕ Add Services
+        </button>
+        <button onClick={() => router.push("/photographers/profile/manage")}>
+          👁 View Profile
         </button>
       </div>
 
