@@ -48,7 +48,10 @@ export default function BookingPage() {
       setPhotographer(data);
     } catch (err: any) {
       // If 401 from backend → redirect to login
-      if (err.message?.includes("authorized") || err.message?.includes("token")) {
+      if (
+        err.message?.includes("authorized") ||
+        err.message?.includes("token")
+      ) {
         router.replace("/login");
         return;
       }
@@ -138,7 +141,7 @@ export default function BookingPage() {
               value={selectedService?.title || ""}
               onChange={(e) => {
                 const service = photographer.services.find(
-                  (s: Service) => s.title === e.target.value
+                  (s: Service) => s.title === e.target.value,
                 );
                 setSelectedService(service || null);
               }}
@@ -149,7 +152,7 @@ export default function BookingPage() {
               </option>
               {photographer.services.map((s, idx) => (
                 <option key={idx} value={s.title}>
-                  {s.title} – ₹{s.price.toLocaleString()}
+                  {s.title} – ₹{Number(s.price || 0).toLocaleString()}
                 </option>
               ))}
             </select>
@@ -159,7 +162,9 @@ export default function BookingPage() {
           {selectedService && (
             <div className="price-summary fade-in">
               <span>Total Amount</span>
-              <strong>₹{selectedService.price.toLocaleString()}</strong>
+              <strong>
+                ₹{Number(selectedService.price || 0).toLocaleString()}
+              </strong>
             </div>
           )}
 

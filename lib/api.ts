@@ -3,9 +3,9 @@ export const api = async (url: string, options: RequestInit = {}) => {
   if (!baseURL) throw new Error("API URL not set");
 
   const token =
-    typeof window !== "undefined"
-      ? localStorage.getItem("token")
-      : null;
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  const { body } = options;
 
   const res = await fetch(`${baseURL}${url}`, {
     // ✅ ALWAYS include credentials
@@ -14,20 +14,20 @@ export const api = async (url: string, options: RequestInit = {}) => {
     ...options,
 
     headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options.headers || {}),
-    },
+  ...(token && { Authorization: `Bearer ${token}` }),
+  ...(body instanceof FormData ? {} : { "Content-Type": "application/json" })
+}
+,
   });
 
   if (res.status === 401) {
-  // Selective clear: only auth items
-  localStorage.removeItem("token");
-  localStorage.removeItem("role");
-  localStorage.removeItem("user");
-  window.location.href = "/login?session=expired";
-  throw new Error("Session expired");
-}
+    // Selective clear: only auth items
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("user");
+    window.location.href = "/login?session=expired";
+    throw new Error("Session expired");
+  }
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));

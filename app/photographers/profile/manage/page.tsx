@@ -59,14 +59,33 @@ export default function ManagePhotographerProfilePage() {
           available: profile.available ?? true,
         });
         setCategories(profile.categories || []);
-        setServices(profile.services || []);
-        setPricePackages(profile.pricePackages || []);
+
+        setServices(
+          (profile.services || []).map((s: any) => ({
+            title: s.title || "",
+            description: s.description || "",
+            price: Number(s.price || 0),
+          })),
+        );
+
+        setPricePackages(
+          (profile.pricePackages || []).map((p: any) => ({
+            type: p.type,
+            description: p.description || "",
+            amount: Number(p.amount || 0),
+          })),
+        );
+
         // If existing images URLs come from server, you can set previews here
       })
       .catch(() => {});
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -134,13 +153,25 @@ export default function ManagePhotographerProfilePage() {
     setSaving(true);
     const formData = new FormData();
 
-    Object.entries(form).forEach(([key, value]) => {
-      formData.append(key, String(value));
-    });
+    // ✅ Sirf wahi fields bhejo jo meaningful hain
+    if (form.name) formData.append("name", form.name);
+    if (form.city) formData.append("city", form.city);
+    if (form.bio) formData.append("bio", form.bio);
 
-    formData.append("categories", JSON.stringify(categories));
-    formData.append("services", JSON.stringify(services));
-    formData.append("pricePackages", JSON.stringify(pricePackages));
+    formData.append("experience", String(form.experience));
+    formData.append("available", String(form.available));
+
+    if (categories.length) {
+      formData.append("categories", JSON.stringify(categories));
+    }
+
+    if (services.length) {
+      formData.append("services", JSON.stringify(services));
+    }
+
+    if (pricePackages.length) {
+      formData.append("pricePackages", JSON.stringify(pricePackages));
+    }
 
     images.forEach((img) => formData.append("images", img));
 
@@ -170,25 +201,49 @@ export default function ManagePhotographerProfilePage() {
           <h2>Basic Information</h2>
           <div className="form-group">
             <label>Studio / Brand Name</label>
-            <input name="name" value={form.name} onChange={handleChange} placeholder="" />
+            <input
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              placeholder=""
+            />
           </div>
           <div className="form-group">
             <label>City</label>
-            <input name="city" value={form.city} onChange={handleChange} placeholder="" />
+            <input
+              name="city"
+              value={form.city}
+              onChange={handleChange}
+              placeholder=""
+            />
           </div>
           <div className="form-group">
             <label>Experience (years)</label>
-            <input type="number" name="experience" value={form.experience} onChange={handleChange} min="0" />
+            <input
+              type="number"
+              name="experience"
+              value={form.experience}
+              onChange={handleChange}
+              min="0"
+            />
           </div>
           <div className="form-group">
             <label>Bio</label>
-            <textarea name="bio" value={form.bio} onChange={handleChange} rows={4} placeholder="" />
+            <textarea
+              name="bio"
+              value={form.bio}
+              onChange={handleChange}
+              rows={4}
+              placeholder=""
+            />
           </div>
           <label className="toggle-label">
             <input
               type="checkbox"
               checked={form.available}
-              onChange={() => setForm((p) => ({ ...p, available: !p.available }))}
+              onChange={() =>
+                setForm((p) => ({ ...p, available: !p.available }))
+              }
             />
             <span>Available for bookings</span>
           </label>
@@ -222,7 +277,9 @@ export default function ManagePhotographerProfilePage() {
                   <strong>{s.title}</strong> — ₹{s.price.toLocaleString()}
                   <p>{s.description}</p>
                 </div>
-                <button className="remove-btn" onClick={() => removeService(i)}>Remove</button>
+                <button className="remove-btn" onClick={() => removeService(i)}>
+                  Remove
+                </button>
               </div>
             ))}
           </div>
@@ -231,20 +288,31 @@ export default function ManagePhotographerProfilePage() {
             <input
               placeholder=""
               value={newService.title}
-              onChange={(e) => setNewService({ ...newService, title: e.target.value })}
+              onChange={(e) =>
+                setNewService({ ...newService, title: e.target.value })
+              }
             />
             <input
               type="number"
               placeholder=""
               value={newService.price || ""}
-              onChange={(e) => setNewService({ ...newService, price: Number(e.target.value) || 0 })}
+              onChange={(e) =>
+                setNewService({
+                  ...newService,
+                  price: Number(e.target.value) || 0,
+                })
+              }
             />
             <input
               placeholder=""
               value={newService.description}
-              onChange={(e) => setNewService({ ...newService, description: e.target.value })}
+              onChange={(e) =>
+                setNewService({ ...newService, description: e.target.value })
+              }
             />
-            <button onClick={addService} className="add-btn">Add Service</button>
+            <button onClick={addService} className="add-btn">
+              Add Service
+            </button>
           </div>
         </section>
 
@@ -253,15 +321,27 @@ export default function ManagePhotographerProfilePage() {
         {/* Portfolio Images */}
         <section className="glass-card section">
           <h2>Portfolio Images</h2>
-          <input type="file" multiple accept="image/*" onChange={handleImageChange} />
-          <p className="file-info">{images.length} new image{images.length !== 1 ? "s" : ""} selected</p>
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+          <p className="file-info">
+            {images.length} new image{images.length !== 1 ? "s" : ""} selected
+          </p>
 
           {previewImages.length > 0 && (
             <div className="image-preview-grid">
               {previewImages.map((src, i) => (
                 <div key={i} className="preview-item">
                   <img src={src} alt="preview" />
-                  <button className="remove-preview" onClick={() => removePreview(i)}>×</button>
+                  <button
+                    className="remove-preview"
+                    onClick={() => removePreview(i)}
+                  >
+                    ×
+                  </button>
                 </div>
               ))}
             </div>
