@@ -26,6 +26,18 @@
    ========================= */
 
 .logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.logo-img {
+  object-fit: contain;
+}
+
+.logo {
   font-size: 1.4rem;
   font-weight: 800;
   color: #020617;
@@ -156,7 +168,7 @@
     flex-direction: column;
     gap: 16px;
     display: none;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   }
 
   .nav-links.open {
@@ -193,4 +205,3 @@
     min-width: 260px;
   }
 }
-

@@ -127,30 +127,39 @@ export default function HomePage() {
           <p>Book your photographer in just 4 simple steps</p>
         </header>
 
+        <div className="progress-line" id="progressLine"></div>
+
         <div className="step-grid">
           {[
             {
               id: 1,
               title: "Search",
               desc: "Browse photographers by category & location.",
+              icon: "🔍",
             },
             {
               id: 2,
               title: "Book",
               desc: "Choose package, date & confirm booking.",
+              icon: "📅",
             },
             {
               id: 3,
               title: "Shoot",
               desc: "Photographer arrives & captures moments.",
+              icon: "📸",
             },
             {
               id: 4,
               title: "Review",
               desc: "Rate & review after successful completion.",
+              icon: "⭐",
             },
           ].map((step) => (
             <div className="step" key={step.id}>
+              <div className="step-icon" aria-hidden="true">
+                {step.icon}
+              </div>
               <span>{step.id}</span>
               <h4>{step.title}</h4>
               <p>{step.desc}</p>

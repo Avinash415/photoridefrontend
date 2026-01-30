@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
@@ -28,18 +29,16 @@ export default function Navbar() {
       <div className="nav-container">
         {/* LOGO */}
         <Link href="/" className="logo" onClick={() => setMenuOpen(false)}>
-          📸 <span>PhotoRide</span>
+          <Image
+            src="/photoridelogo.png"
+            alt="PhotoRide Logo"
+            width={32}
+            height={32}
+            className="logo-img"
+            priority
+          />
+          <span>PhotoRide</span>
         </Link>
-
-        {/* SEARCH BAR - Only for logged-in users */}
-        {(!isLoggedIn || isCustomer) && (
-          <div className="nav-search">
-            <input
-              type="text"
-              placeholder="Search photographers, weddings, events..."
-            />
-          </div>
-        )}
 
         {/* NAVIGATION LINKS */}
         <nav className={`nav-links ${menuOpen ? "open" : ""}`}>
